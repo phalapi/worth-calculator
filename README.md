@@ -26,10 +26,11 @@
    <a href="#japanese"><img src="https://img.shields.io/badge/日本語-green?style=for-the-badge" alt="日本語" /></a>
 </p>
 
+<p>
+(访问量激增，Vercel免费额度老是用完，广告位招租)
+</p>
 </div>
 
-
-(访问量激增，Vercel免费额度老是用完，广告位招租)
 ---
 
 <div id="english">
