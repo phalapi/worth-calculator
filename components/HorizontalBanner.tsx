@@ -1,11 +1,18 @@
 'use client';
 
+import { isAdEnabled, getAdLink } from '@/utils/adConfig';
+
 export default function HorizontalBanner() {
+  // 如果广告未启用或已过期，不显示
+  if (!isAdEnabled()) {
+    return null;
+  }
+
   return (
     <div className="w-full bg-gray-100">
       {/* 横向 Banner - 7:1 比例 */}
       <a 
-        href="https://www.google.com"
+        href={getAdLink()}
         target="_blank"
         rel="noopener noreferrer"
         className="block relative w-full bg-gray-200 overflow-hidden hover:opacity-90 transition-opacity duration-300 cursor-pointer"

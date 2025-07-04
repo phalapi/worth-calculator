@@ -2,11 +2,17 @@
 
 import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
+import { isAdEnabled, getAdLink } from '@/utils/adConfig';
 
 export default function VerticalAd() {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    // 检查广告是否应该显示
+    if (!isAdEnabled()) {
+      return;
+    }
+
     // 延迟显示广告，避免影响首屏加载
     const timer = setTimeout(() => {
       setIsVisible(true);
@@ -35,7 +41,7 @@ export default function VerticalAd() {
 
         {/* 广告内容 - 3:5 比例（宽:高） */}
         <a 
-          href="https://www.google.com"
+          href={getAdLink()}
           target="_blank"
           rel="noopener noreferrer"
           className="block relative bg-gray-200 rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 cursor-pointer"
