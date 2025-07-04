@@ -4,14 +4,17 @@ export default function HorizontalBanner() {
   return (
     <div className="w-full bg-gray-100">
       {/* 横向 Banner - 7:1 比例 */}
-      <div 
-        className="relative w-full bg-gray-200 overflow-hidden"
+      <a 
+        href="https://www.google.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="block relative w-full bg-gray-200 overflow-hidden hover:opacity-90 transition-opacity duration-300 cursor-pointer"
         style={{
           aspectRatio: '7/1'
         }}
       >
         {/* 占位内容 */}
-        <div className="absolute inset-0 flex items-center justify-center">
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <div className="text-center">
             <div className="text-gray-500 text-base sm:text-lg">广告横幅</div>
             <div className="text-gray-400 text-xs sm:text-sm">7:1 横向广告</div>
@@ -24,7 +27,7 @@ export default function HorizontalBanner() {
           alt="横幅广告"
           className="w-full h-full object-cover"
         />
-      </div>
+      </a>
     </div>
   );
 }

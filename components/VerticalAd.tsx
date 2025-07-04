@@ -34,15 +34,18 @@ export default function VerticalAd() {
         </button>
 
         {/* 广告内容 - 3:5 比例（宽:高） */}
-        <div 
-          className="relative bg-gray-200 rounded-lg overflow-hidden shadow-xl"
+        <a 
+          href="https://www.google.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block relative bg-gray-200 rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 cursor-pointer"
           style={{
             width: 'min(300px, 60vw)',
             aspectRatio: '3/5'
           }}
         >
           {/* 占位内容 */}
-          <div className="absolute inset-0 flex items-center justify-center">
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
             <div className="text-center">
               <div className="text-gray-500 text-lg mb-2">广告位</div>
               <div className="text-gray-400 text-sm">3:5 竖向广告</div>
@@ -55,7 +58,7 @@ export default function VerticalAd() {
             alt="广告"
             className="w-full h-full object-cover"
           />
-        </div>
+        </a>
       </div>
     </div>
   );
