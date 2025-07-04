@@ -33,25 +33,25 @@ export default function VerticalAd() {
           <X className="h-5 w-5 text-gray-700" />
         </button>
 
-        {/* 广告内容 - 5:3 比例 */}
+        {/* 广告内容 - 3:5 比例（宽:高） */}
         <div 
           className="relative bg-gray-200 rounded-lg overflow-hidden shadow-xl"
           style={{
-            width: 'min(500px, 90vw)',
-            aspectRatio: '5/3'
+            width: 'min(300px, 60vw)',
+            aspectRatio: '3/5'
           }}
         >
           {/* 占位内容 */}
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center">
               <div className="text-gray-500 text-lg mb-2">广告位</div>
-              <div className="text-gray-400 text-sm">5:3 竖向广告</div>
+              <div className="text-gray-400 text-sm">3:5 竖向广告</div>
             </div>
           </div>
           
           {/* 实际广告图片占位 */}
           <img 
-            src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 300'%3E%3Crect fill='%23e5e7eb' width='500' height='300'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle' font-family='Arial' font-size='24' fill='%236b7280'%3E广告占位图%3C/text%3E%3C/svg%3E"
+            src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 500'%3E%3Crect fill='%23e5e7eb' width='300' height='500'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle' font-family='Arial' font-size='24' fill='%236b7280'%3E广告占位图%3C/text%3E%3C/svg%3E"
             alt="广告"
             className="w-full h-full object-cover"
           />
