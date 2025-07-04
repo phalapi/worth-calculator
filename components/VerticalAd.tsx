@@ -1,15 +1,25 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { X } from 'lucide-react';
 import { isAdEnabled, getAdLink } from '@/utils/adConfig';
 
 export default function VerticalAd() {
   const [isVisible, setIsVisible] = useState(false);
+  const [imageExists, setImageExists] = useState(false);
+
+  useEffect(() => {
+    // 检查图片是否存在
+    const img = new window.Image();
+    img.onload = () => setImageExists(true);
+    img.onerror = () => setImageExists(false);
+    img.src = '/mainpage.png';
+  }, []);
 
   useEffect(() => {
     // 检查广告是否应该显示
-    if (!isAdEnabled()) {
+    if (!isAdEnabled() || !imageExists) {
       return;
     }
 
@@ -19,7 +29,7 @@ export default function VerticalAd() {
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [imageExists]);
 
   const handleClose = () => {
     setIsVisible(false);
@@ -50,19 +60,13 @@ export default function VerticalAd() {
             aspectRatio: '3/5'
           }}
         >
-          {/* 占位内容 */}
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <div className="text-center">
-              <div className="text-gray-500 text-lg mb-2">广告位</div>
-              <div className="text-gray-400 text-sm">3:5 竖向广告</div>
-            </div>
-          </div>
-          
-          {/* 实际广告图片占位 */}
-          <img 
-            src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 500'%3E%3Crect fill='%23e5e7eb' width='300' height='500'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle' font-family='Arial' font-size='24' fill='%236b7280'%3E广告占位图%3C/text%3E%3C/svg%3E"
+          {/* 实际广告图片 */}
+          <Image 
+            src="/mainpage.png"
             alt="广告"
-            className="w-full h-full object-cover"
+            fill
+            className="object-cover"
+            priority
           />
         </a>
       </div>

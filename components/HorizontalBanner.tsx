@@ -1,10 +1,27 @@
 'use client';
 
+import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { isAdEnabled, getAdLink } from '@/utils/adConfig';
 
 export default function HorizontalBanner() {
+  const [imageExists, setImageExists] = useState(false);
+
+  useEffect(() => {
+    // 检查图片是否存在
+    const img = new window.Image();
+    img.onload = () => setImageExists(true);
+    img.onerror = () => setImageExists(false);
+    img.src = '/banner.png';
+  }, []);
+
   // 如果广告未启用或已过期，不显示
   if (!isAdEnabled()) {
+    return null;
+  }
+
+  // 如果图片不存在，不显示
+  if (!imageExists) {
     return null;
   }
 
@@ -20,19 +37,13 @@ export default function HorizontalBanner() {
           aspectRatio: '7/1'
         }}
       >
-        {/* 占位内容 */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div className="text-center">
-            <div className="text-gray-500 text-base sm:text-lg">广告横幅</div>
-            <div className="text-gray-400 text-xs sm:text-sm">7:1 横向广告</div>
-          </div>
-        </div>
-        
-        {/* 实际广告图片占位 */}
-        <img 
-          src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 700 100'%3E%3Crect fill='%23e5e7eb' width='700' height='100'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle' font-family='Arial' font-size='20' fill='%236b7280'%3E横幅广告占位图%3C/text%3E%3C/svg%3E"
+        {/* 实际广告图片 */}
+        <Image 
+          src="/banner.png"
           alt="横幅广告"
-          className="w-full h-full object-cover"
+          fill
+          className="object-cover"
+          priority
         />
       </a>
     </div>
