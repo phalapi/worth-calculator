@@ -26,14 +26,14 @@ export default function HorizontalBanner() {
   }
 
   return (
-    <div className="w-full bg-gray-100 py-2">
+    <div className="w-full bg-gray-50 dark:bg-gray-900 py-2">
       <div className="max-w-4xl mx-auto px-4">
         {/* 横向 Banner - 7:1 比例 */}
         <a 
           href={getAdLink()}
           target="_blank"
           rel="noopener noreferrer"
-          className="block relative w-full bg-gray-200 overflow-hidden hover:opacity-90 transition-opacity duration-300 cursor-pointer rounded-lg shadow-sm"
+          className="block relative w-full bg-gray-200 dark:bg-gray-800 overflow-hidden hover:opacity-90 transition-opacity duration-300 cursor-pointer rounded-lg shadow-sm"
           style={{
             aspectRatio: '7/1'
           }}
