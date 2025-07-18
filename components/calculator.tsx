@@ -6,6 +6,7 @@ import Link from 'next/link'; // 导入Link组件用于导航
 import { useLanguage } from './LanguageContext';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { countryNames } from './LanguageContext';
+import GoogleBannerAd from "@/components/GoogleBannerAd";
 
 // 定义PPP转换因子映射表
 const pppFactors: Record<string, number> = {
@@ -1005,6 +1006,8 @@ const SalaryCalculator: React.FC<SalaryCalculatorProps> = ({ countryParam }) => 
         
       </div>
 
+      <GoogleBannerAd />
+      
       {/* 优化后的结果卡片 */}
       <div ref={shareResultsRef} className="mb-8">
         <div className="bg-gradient-to-br from-blue-50/80 to-indigo-50/80 dark:from-gray-800/90 dark:to-gray-900 rounded-2xl p-6 shadow-lg ring-1 ring-gray-200/50 dark:ring-gray-700/30 backdrop-blur-sm transition-all duration-300 animate-fadeIn">
