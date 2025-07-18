@@ -18,8 +18,8 @@ const geistMono = localFont({
 
 export const metadata: Metadata = {
   title: {
-    default: "Job Worth Calculator",
-    template: "%s | Job Worth Calculator"
+    default: "Job Worth Calculator | 这班上得值不值",
+    template: "%s"
   },
   alternates: {
     languages: {
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
       "zh-CN": "/",
     },
   },
-  description: "这班上得值不值，计算你的工作性价比 | Job Worth Calculator, Calculate your job's value",
+  description: "计算你的工作价值，了解薪资性价比。支持全球180+国家的购买力平价(PPP)计算，输入年薪即可获得详细的工作价值分析报告。Job Worth Calculator",
 };
 
 export default function RootLayout({
@@ -59,7 +59,7 @@ gtag('config', 'G-Q2SCB8T8QH');`
             <div className="max-w-4xl mx-auto px-4">
               <CountryFooter />
               <div className="text-center">
-                <span className="text-[10px] text-gray-400 dark:text-gray-500">Tool by pdftool.cc</span>
+                <span className="text-[10px] text-gray-400 dark:text-gray-500">Tool by <a href="https://www.pdftool.cc" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-600">pdftool.cc</a></span>
               </div>
             </div>
           </footer>
