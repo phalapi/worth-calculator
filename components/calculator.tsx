@@ -1013,7 +1013,7 @@ const SalaryCalculator: React.FC<SalaryCalculatorProps> = ({ countryParam }) => 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-8">
       <div className="mb-8 text-center">
-        <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-teal-500 to-blue-600 py-2 animate-fadeIn">
+        <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-white py-2 animate-fadeIn">
           {t('title')}·{getCountryName(selectedCountry)}
         </h1>
         
@@ -1027,7 +1027,7 @@ const SalaryCalculator: React.FC<SalaryCalculatorProps> = ({ countryParam }) => 
       
       {/* 结果卡片 */}
       <div ref={shareResultsRef} className="mb-8">
-        <div className="bg-gradient-to-br from-blue-50/80 via-indigo-50/60 to-purple-50/80 dark:from-gray-800/90 dark:via-indigo-900/30 dark:to-purple-900/20 rounded-2xl p-8 shadow-xl ring-1 ring-gray-200/50 dark:ring-gray-700/30 backdrop-blur-sm transition-all duration-300 animate-fadeIn">
+        <div className="bg-gradient-to-br from-blue-50/80 via-indigo-50/60 to-purple-50/80 dark:from-gray-800/90 dark:via-indigo-900/30 dark:to-purple-900/20 rounded-2xl p-8 shadow-xl ring-1 ring-gray-200/50 dark:ring-gray-700/30 transition-all duration-300 animate-fadeIn">
           <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-6 flex items-center gap-2 border-b border-gray-200/50 dark:border-gray-700/50 pb-3">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
@@ -1057,7 +1057,7 @@ const SalaryCalculator: React.FC<SalaryCalculatorProps> = ({ countryParam }) => 
               </div>
               <div className="text-3xl font-bold mt-2 text-gray-900 dark:text-white animate-countUp">
                 <span className="text-xl align-top">{getCurrencySymbol(selectedCountry)}</span>
-                <span className="bg-gradient-to-r from-blue-600 to-blue-400 dark:from-blue-400 dark:to-blue-300 bg-clip-text text-transparent">
+                <span className="text-blue-600 dark:text-blue-400">
                   {getDisplaySalary()}
                 </span>
               </div>

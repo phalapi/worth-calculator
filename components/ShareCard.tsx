@@ -637,7 +637,7 @@ const ShareCard: React.FC<ShareCardProps> = (props) => {
         {/* 标题 - 移动端更紧凑 */}
         <div className="mb-5 md:mb-10 text-center">
           <div className="text-4xl md:text-6xl mb-2 md:mb-4">{isClient ? getEmoji(parseFloat(props.value)) : '😊'}</div>
-          <h1 className="text-xl md:text-3xl font-bold mb-2 md:mb-3 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
+          <h1 className="text-xl md:text-3xl font-bold mb-2 md:mb-3 text-gray-900">
             {t('share_your_job_worth_report')}
           </h1>
           <div className="flex justify-center items-center gap-2">
