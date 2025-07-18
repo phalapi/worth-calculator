@@ -379,7 +379,11 @@ interface Result {
   assessmentColor: string;
 }
 
-const SalaryCalculator = () => {
+interface SalaryCalculatorProps {
+  countryParam?: string;
+}
+
+const SalaryCalculator: React.FC<SalaryCalculatorProps> = ({ countryParam }) => {
   // 获取语言上下文
   const { t, language } = useLanguage();
   
@@ -443,16 +447,34 @@ const SalaryCalculator = () => {
   // 修改为国家代码，默认为中国
   const [selectedCountry, setSelectedCountry] = useState<string>('CN');
   
-  // 初始化时从localStorage加载国家设置
+  // 初始化时从localStorage加载国家设置，或根据 countryParam 设置
   useEffect(() => {
-    // 从本地存储读取国家设置
-    if (typeof window !== 'undefined') {
+    if (countryParam) {
+      // 支持英文名、中文名、代码都能跳转
+      let code: string | null = null;
+      // 先查英文名
+      for (const [cc, name] of Object.entries(countryNames.en)) {
+        if (name.toLowerCase() === countryParam.toLowerCase()) code = cc;
+      }
+      // 再查中文名
+      if (!code) {
+        for (const [cc, name] of Object.entries(countryNames.zh)) {
+          if (name === countryParam) code = cc;
+        }
+      }
+      // 再查直接是代码
+      if (!code && pppFactors[countryParam.toUpperCase()]) {
+        code = countryParam.toUpperCase();
+      }
+      // 找到就设置
+      if (code) setSelectedCountry(code);
+    } else if (typeof window !== 'undefined') {
       const savedCountry = localStorage.getItem('selectedCountry');
       if (savedCountry) {
         setSelectedCountry(savedCountry);
       }
     }
-  }, []);
+  }, [countryParam]);
   
   // 当国家选择改变时保存到localStorage
   const handleCountryChange = (countryCode: string) => {
@@ -1155,12 +1177,7 @@ const SalaryCalculator = () => {
                 onChange={(e) => handleCountryChange(e.target.value)}
                 className="mt-1 block w-full py-2 px-3 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               >
-                {Object.keys(pppFactors).sort((a, b) => {
-                  // 确保中国始终排在第一位
-                  if (a === 'CN') return -1;
-                  if (b === 'CN') return 1;
-                  return new Intl.Collator(['zh', 'ja', 'en']).compare(getCountryName(a), getCountryName(b));
-                }).map(code => (
+                {Object.keys(pppFactors).sort((a, b) => pppFactors[b] - pppFactors[a]).map(code => (
                   <option key={code} value={code}>
                     {getCountryName(code)} ({pppFactors[code].toFixed(2)})
                   </option>
