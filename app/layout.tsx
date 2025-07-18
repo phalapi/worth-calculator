@@ -40,6 +40,14 @@ export default function RootLayout({
       <head>
         <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4086960815369796" crossOrigin="anonymous"></script>
+        {/* Google Analytics */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q2SCB8T8QH"></script>
+        <script dangerouslySetInnerHTML={{
+          __html: `window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-Q2SCB8T8QH');`
+        }} />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
