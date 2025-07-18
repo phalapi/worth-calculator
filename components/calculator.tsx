@@ -383,8 +383,9 @@ const SalaryCalculator = () => {
   // 获取语言上下文
   const { t, language } = useLanguage();
   
-  // 添加客户端检测
+  // 状态管理
   const [isBrowser, setIsBrowser] = useState(false);
+  const [isCalculating, setIsCalculating] = useState(false);
   
   // 添加滚动位置保存的引用
   const scrollPositionRef = useRef(0);
@@ -400,8 +401,8 @@ const SalaryCalculator = () => {
     // 在客户端环境中执行重定向
     if (typeof window !== 'undefined') {
       const hostname = window.location.hostname;
-      if (hostname !== 'worthjob.zippland.com' && hostname !== 'localhost' && !hostname.includes('127.0.0.1')) {
-        window.location.href = 'https://worthjob.zippland.com' + window.location.pathname;
+      if (hostname !== 'worthjob.pdftool.cc' && hostname !== 'localhost' && !hostname.includes('127.0.0.1')) {
+        window.location.href = 'https://worthjob.pdftool.cc' + window.location.pathname;
       }
     }
   }, []);
@@ -970,242 +971,151 @@ const SalaryCalculator = () => {
   }, []);
 
   return (
-    <div className="max-w-2xl mx-auto p-4 sm:p-6">
-      <div className="mb-4 text-center">
-        <h1 className="text-3xl md:text-4xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 py-2">{t('title')}</h1>
-        
-        <div className="mb-3">
-          <a
-            href="https://github.com/zippland/worth-calculator"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition-colors inline-flex items-center gap-1.5"
-          >
-            <Star className="h-3.5 w-3.5" />
-            {t('star_request')}
-          </a>
-        </div>
-        
-        <div className="flex items-center justify-center gap-3 mb-2">
-          <p className="text-sm text-gray-500 dark:text-gray-400">v6.2.1</p>
-          <a
-            href="https://github.com/zippland/worth-calculator"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm text-gray-500 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-400 transition-colors flex items-center gap-1"
-          >
-            <Github className="h-3.5 w-3.5" />
-            {t('github')}
-          </a>
-          <a
-            href="https://www.xiaohongshu.com/user/profile/623e8b080000000010007721?xsec_token=YBzoLUB4HsSITTBOgPAXY-0Gvqvn3HqHpcDeA3sHhDh-M%3D&xsec_source=app_share&xhsshare=CopyLink&appuid=5c5d5259000000001d00ef04&apptime=1743400694&share_id=b9bfcd5090f9473daf5c1d1dc3eb0921&share_channel=copy_link"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm text-gray-500 hover:text-pink-500 dark:text-gray-400 dark:hover:text-pink-400 transition-colors flex items-center gap-1"
-          >
-            <Book className="h-3.5 w-3.5" />
-            {t('xiaohongshu')}
-          </a>
-          {/* 仅在客户端渲染历史记录按钮 */}
-          {isBrowser && (
-            <button
-              onClick={() => setShowHistory(!showHistory)}
-              className="text-sm text-gray-500 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-400 transition-colors flex items-center gap-1 cursor-pointer"
-            >
-              <History className="h-3.5 w-3.5" />
-              {t('history')}
-            </button>
-          )}
-        </div>
-        
-        {/* 历史记录列表 - 仅在客户端渲染 */}
-        {isBrowser && showHistory && (
-          <div className="relative z-10">
-            <div className="absolute left-1/2 transform -translate-x-1/2 mt-1 w-72 md:w-96 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 max-h-80 overflow-y-auto">
-              <div className="p-3">
-                <div className="flex justify-between items-center mb-3 border-b pb-2 border-gray-200 dark:border-gray-700">
-                  <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center">
-                    <History className="h-3.5 w-3.5 mr-1" />
-                    {t('history')}
-                  </h3>
-                  <div className="flex gap-2">
-                    {history.length > 0 && (
-                      <button 
-                        onClick={clearAllHistory}
-                        className="text-xs text-gray-500 hover:text-red-500 dark:hover:text-red-400 transition-colors px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
-                      >
-                        {t('clear_all')}
-                      </button>
-                    )}
-                    <button 
-                      onClick={(e) => {
-                        e.stopPropagation(); // 阻止事件冒泡
-                        setShowHistory(false);
-                      }}
-                      className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 w-6 h-6 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
-                    >
-                      ×
-                    </button>
-                  </div>
-                </div>
-                
-                {history.length > 0 ? (
-                  <ul className="space-y-2">
-                    {history.map((item) => (
-                      <li key={item.id} className="flex items-center justify-between p-2 rounded-lg bg-gray-50 dark:bg-gray-750 hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors border border-gray-100 dark:border-gray-600">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-1">
-                            <span className={`text-sm font-semibold ${item.assessmentColor}`}>{item.value}</span>
-                            <span className="text-xs px-2 py-0.5 rounded-full bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-300">
-                              {item.countryCode !== 'CN' ? '$' : '¥'}{item.salary}
-                            </span>
-                          </div>
-                          <div className="text-xs text-gray-500 flex items-center">
-                            <span>{formatDate(item.timestamp)}</span>
-                          </div>
-                        </div>
-                        <div className="flex gap-1">
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation(); // 阻止事件冒泡
-                              e.preventDefault(); // 阻止默认行为
-                              
-                              // 恢复历史记录中的值到当前表单
-                              setFormData({
-                                ...formData,
-                                salary: item.salary,
-                                cityFactor: item.cityFactor,
-                                workHours: item.workHours,
-                                commuteHours: item.commuteHours,
-                                restTime: item.restTime,
-                                workDaysPerWeek: item.workDaysPerWeek,
-                                wfhDaysPerWeek: item.wfhDaysPerWeek,
-                                annualLeave: item.annualLeave,
-                                paidSickLeave: item.paidSickLeave,
-                                publicHolidays: item.publicHolidays,
-                                workEnvironment: item.workEnvironment,
-                                leadership: item.leadership,
-                                teamwork: item.teamwork,
-                                degreeType: item.degreeType,
-                                schoolType: item.schoolType,
-                                education: item.education,
-                                homeTown: item.homeTown,
-                                shuttle: item.shuttle,
-                                canteen: item.canteen,
-                                workYears: item.workYears,
-                                jobStability: item.jobStability,
-                                bachelorType: item.bachelorType,
-                                // 确保 hasShuttle 和 hasCanteen 有合法的布尔值
-                                hasShuttle: typeof item.hasShuttle === 'boolean' ? item.hasShuttle : false,
-                                hasCanteen: typeof item.hasCanteen === 'boolean' ? item.hasCanteen : false,
-                              });
-                              
-                              // 设置国家
-                              handleCountryChange(item.countryCode);
-                              
-                              // 关闭历史记录面板
-                              setShowHistory(false);
-                            }}
-                            className="text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 p-1.5 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded"
-                            title={t('restore_history')}
-                          >
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                            </svg>
-                          </button>
-                          <Link
-                            href={{
-                              pathname: '/share',
-                              query: {
-                                value: item.value,
-                                assessment: item.assessment, // 传递翻译键而不是文本
-                                assessmentColor: item.assessmentColor,
-                                cityFactor: item.cityFactor,
-                                workHours: item.workHours,
-                                commuteHours: item.commuteHours,
-                                restTime: item.restTime,
-                                dailySalary: item.dailySalary,
-                                isYuan: item.countryCode !== 'CN' ? 'false' : 'true',
-                                workDaysPerYear: item.workDaysPerYear,
-                                workDaysPerWeek: item.workDaysPerWeek,
-                                wfhDaysPerWeek: item.wfhDaysPerWeek,
-                                annualLeave: item.annualLeave,
-                                paidSickLeave: item.paidSickLeave,
-                                publicHolidays: item.publicHolidays,
-                                workEnvironment: item.workEnvironment,
-                                leadership: item.leadership,
-                                teamwork: item.teamwork,
-                                degreeType: item.degreeType,
-                                schoolType: item.schoolType,
-                                education: item.education,
-                                homeTown: item.homeTown,
-                                shuttle: item.shuttle,
-                                canteen: item.canteen,
-                                workYears: item.workYears,
-                                jobStability: item.jobStability,
-                                bachelorType: item.bachelorType,
-                                countryCode: item.countryCode,
-                                countryName: getCountryName(item.countryCode),
-                                hasShuttle: item.hasShuttle,
-                                hasCanteen: item.hasCanteen,
-                              }
-                            }}
-                            className="text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 p-1.5 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded"
-                          >
-                            <Eye className="w-4 h-4" />
-                          </Link>
-                          <button
-                            onClick={(e) => deleteHistoryItem(item.id, e)}
-                            className="text-gray-400 hover:text-red-500 dark:hover:text-red-400 p-1.5 hover:bg-red-50 dark:hover:bg-red-900/20 rounded"
-                            title={t('delete_history')}
-                          >
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                            </svg>
-                          </button>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <div className="text-center py-8 px-4">
-                    <div className="text-gray-400 mb-2">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 mx-auto opacity-30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                    </div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                      {t('no_history')}
-                    </p>
-                    <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
-                      {t('history_notice')}
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-8">
+      <div className="mb-8 text-center">
+        <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-teal-500 to-blue-600 py-2 animate-fadeIn">
+          {t('title')}
+        </h1>
         
         <div className="flex justify-center mb-2">
           <LanguageSwitcher />
         </div>
         
-        {/* 访问统计 - 仅在客户端渲染 */}
-        {isBrowser && (
-          <div className="mt-1 text-xs text-gray-400 dark:text-gray-600 flex justify-center gap-4">
-            <span id="busuanzi_container_site_pv" className={`transition-opacity duration-300 ${visitorVisible ? 'opacity-100' : 'opacity-0'}`}>
-              {t('visits')}: <span id="busuanzi_value_site_pv"></span>
-            </span>
-            <span id="busuanzi_container_site_uv" className={`transition-opacity duration-300 ${visitorVisible ? 'opacity-100' : 'opacity-0'}`}>
-              {t('visitors')}: <span id="busuanzi_value_site_uv"></span>
-            </span>
-          </div>
-        )}
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl shadow-gray-200/50 dark:shadow-black/30">
+      {/* 优化后的结果卡片 */}
+      <div ref={shareResultsRef} className="mb-8">
+        <div className="bg-gradient-to-br from-blue-50/80 to-indigo-50/80 dark:from-gray-800/90 dark:to-gray-900 rounded-2xl p-6 shadow-lg ring-1 ring-gray-200/50 dark:ring-gray-700/30 backdrop-blur-sm transition-all duration-300 animate-fadeIn">
+          <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-6 flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+            </svg>
+            {t('calculation_results')}
+          </h3>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {/* 工作日卡片 */}
+            <div className="bg-white/80 dark:bg-gray-800/80 p-5 rounded-xl shadow-sm ring-1 ring-gray-200/50 dark:ring-gray-700/50 transition-all duration-300 hover:shadow-md hover:ring-blue-200 dark:hover:ring-blue-400/30">
+              <div className="text-sm font-medium text-gray-500 dark:text-gray-400 flex items-center gap-1.5">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                {t('working_days_per_year')}
+              </div>
+              <div className="text-3xl font-bold mt-2 text-gray-900 dark:text-white animate-countUp">
+                {calculateWorkingDays()}<span className="text-lg ml-1 text-gray-500 dark:text-gray-400">{t('days_unit')}</span>
+              </div>
+            </div>
+            
+            {/* 日薪卡片 */}
+            <div className="bg-white/80 dark:bg-gray-800/80 p-5 rounded-xl shadow-sm ring-1 ring-gray-200/50 dark:ring-gray-700/50 transition-all duration-300 hover:shadow-md hover:ring-blue-200 dark:hover:ring-blue-400/30">
+              <div className="text-sm font-medium text-gray-500 dark:text-gray-400 flex items-center gap-1.5">
+                <Wallet className="h-4 w-4" />
+                {t('average_daily_salary')}
+              </div>
+              <div className="text-3xl font-bold mt-2 text-gray-900 dark:text-white animate-countUp">
+                <span className="text-xl align-top">{getCurrencySymbol(selectedCountry)}</span>
+                <span className="bg-gradient-to-r from-blue-600 to-blue-400 dark:from-blue-400 dark:to-blue-300 bg-clip-text text-transparent">
+                  {getDisplaySalary()}
+                </span>
+              </div>
+            </div>
+            
+            {/* 工作价值卡片 */}
+            <div className="bg-white/80 dark:bg-gray-800/80 p-5 rounded-xl shadow-sm ring-1 ring-gray-200/50 dark:ring-gray-700/50 transition-all duration-300 hover:shadow-md hover:ring-blue-200 dark:hover:ring-blue-400/30">
+              <div className="text-sm font-medium text-gray-500 dark:text-gray-400 flex items-center gap-1.5">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                </svg>
+                {t('job_value')}
+              </div>
+              <div className="flex items-center gap-3 mt-2">
+                <div className={`text-3xl font-bold ${getValueAssessment().color} animate-countUp`}>
+                  {value.toFixed(2)}
+                </div>
+                <div className="flex">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <Star 
+                      key={star}
+                      className={`h-5 w-5 ${value >= star * 0.8 ? 'fill-current' : ''} ${getValueAssessment().color}`}
+                    />
+                  ))}
+                </div>
+              </div>
+              <div className={`text-lg font-medium mt-2 ${getValueAssessment().color}`}>
+                {getValueAssessment().text}
+              </div>
+            </div>
+          </div>
+          
+          {/* 优化后的分享按钮 */}
+          <div className="mt-8 flex justify-end">
+            <Link
+              href={{
+                pathname: '/share',
+                query: {
+                  value: value.toFixed(2),
+                  assessment: getValueAssessmentKey(),
+                  assessmentColor: getValueAssessment().color,
+                  cityFactor: formData.cityFactor,
+                  workHours: formData.workHours,
+                  commuteHours: formData.commuteHours,
+                  restTime: formData.restTime,
+                  dailySalary: getDisplaySalary(),
+                  isYuan: selectedCountry !== 'CN' ? 'false' : 'true',
+                  workDaysPerYear: calculateWorkingDays().toString(),
+                  workDaysPerWeek: formData.workDaysPerWeek,
+                  wfhDaysPerWeek: formData.wfhDaysPerWeek,
+                  annualLeave: formData.annualLeave,
+                  paidSickLeave: formData.paidSickLeave,
+                  publicHolidays: formData.publicHolidays,
+                  workEnvironment: formData.workEnvironment,
+                  leadership: formData.leadership,
+                  teamwork: formData.teamwork,
+                  degreeType: formData.degreeType,
+                  schoolType: formData.schoolType,
+                  education: formData.education,
+                  homeTown: formData.homeTown,
+                  shuttle: formData.hasShuttle ? formData.shuttle : '1.0',
+                  canteen: formData.hasCanteen ? formData.canteen : '1.0',
+                  workYears: formData.workYears,
+                  jobStability: formData.jobStability,
+                  bachelorType: formData.bachelorType,
+                  countryCode: selectedCountry,
+                  countryName: getCountryName(selectedCountry),
+                  currencySymbol: getCurrencySymbol(selectedCountry),
+                  hasShuttle: formData.hasShuttle,
+                  hasCanteen: formData.hasCanteen,
+                }
+              }}
+              className={`group relative inline-flex items-center justify-center px-5 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500
+                ${formData.salary 
+                  ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-md hover:shadow-lg hover:from-blue-700 hover:to-blue-600 dark:from-blue-700 dark:to-blue-600 dark:hover:from-blue-600 dark:hover:to-blue-500' 
+                  : 'bg-gray-200 text-gray-400 cursor-not-allowed dark:bg-gray-700 dark:text-gray-500'}`}
+              onClick={() => formData.salary ? saveToHistory() : null}
+            >
+              <span className="absolute inset-0 rounded-lg bg-blue-700 opacity-0 group-hover:opacity-10 transition-opacity duration-200 dark:bg-blue-400"></span>
+              <FileText className="w-4 h-4 mr-2" />
+              {t('view_report')}
+              <svg xmlns="http://www.w3.org/2000/svg" className="ml-1.5 h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* 基本信息表单 */}
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl shadow-gray-200/50 dark:shadow-black/30 overflow-hidden">
         <div className="p-6 space-y-8">
+          <div className="bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-800/30 px-6 py-4 -mx-6 border-b border-blue-100 dark:border-blue-900/50">
+            <h2 className="text-xl font-semibold text-blue-800 dark:text-blue-300 flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              {t('basic_info')}
+            </h2>
+          </div>
           {/* 薪资与工作时间 section */}
           <div className="space-y-6">
             <div>
@@ -1597,80 +1507,9 @@ const SalaryCalculator = () => {
             </div>
           </div>
         </div>
+        
       </div>
 
-      {/* 结果卡片优化 */}
-      <div ref={shareResultsRef} className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 rounded-xl p-6 shadow-inner">
-        <div className="grid grid-cols-3 gap-8">
-          <div>
-            <div className="text-sm font-medium text-gray-500 dark:text-gray-400">{t('working_days_per_year')}</div>
-            <div className="text-2xl font-semibold mt-1 text-gray-900 dark:text-white">{calculateWorkingDays()}{t('days_unit')}</div>
-          </div>
-          <div>
-            <div className="text-sm font-medium text-gray-500 dark:text-gray-400">{t('average_daily_salary')}</div>
-            <div className="text-2xl font-semibold mt-1 text-gray-900 dark:text-white">
-              {getCurrencySymbol(selectedCountry)}{getDisplaySalary()}
-            </div>
-          </div>
-          <div>
-            <div className="text-sm font-medium text-gray-500 dark:text-gray-400">{t('job_value')}</div>
-            <div className={`text-2xl font-semibold mt-1 ${getValueAssessment().color}`}>
-              {value.toFixed(2)}
-              <span className="text-base ml-2">({getValueAssessment().text})</span>
-            </div>
-          </div>
-        </div>
-        
-        {/* 修改分享按钮为链接到分享页面，并保存到历史 */}
-        <div className="mt-6 flex justify-end">
-          <Link
-            href={{
-              pathname: '/share',
-              query: {
-                value: value.toFixed(2),
-                assessment: getValueAssessmentKey(),
-                assessmentColor: getValueAssessment().color,
-                cityFactor: formData.cityFactor,
-                workHours: formData.workHours,
-                commuteHours: formData.commuteHours,
-                restTime: formData.restTime,
-                dailySalary: getDisplaySalary(),
-                isYuan: selectedCountry !== 'CN' ? 'false' : 'true',
-                workDaysPerYear: calculateWorkingDays().toString(),
-                workDaysPerWeek: formData.workDaysPerWeek,
-                wfhDaysPerWeek: formData.wfhDaysPerWeek,
-                annualLeave: formData.annualLeave,
-                paidSickLeave: formData.paidSickLeave,
-                publicHolidays: formData.publicHolidays,
-                workEnvironment: formData.workEnvironment,
-                leadership: formData.leadership,
-                teamwork: formData.teamwork,
-                degreeType: formData.degreeType,
-                schoolType: formData.schoolType,
-                education: formData.education,
-                homeTown: formData.homeTown,
-                shuttle: formData.hasShuttle ? formData.shuttle : '1.0',
-                canteen: formData.hasCanteen ? formData.canteen : '1.0',
-                workYears: formData.workYears,
-                jobStability: formData.jobStability,
-                bachelorType: formData.bachelorType,
-                countryCode: selectedCountry,
-                countryName: getCountryName(selectedCountry),
-                currencySymbol: getCurrencySymbol(selectedCountry),
-                hasShuttle: formData.hasShuttle,
-                hasCanteen: formData.hasCanteen,
-              }
-            }}
-            className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors
-              ${formData.salary ? 'bg-blue-100 text-blue-700 hover:bg-blue-200 dark:bg-blue-900 dark:text-blue-300 dark:hover:bg-blue-800' : 
-              'bg-gray-100 text-gray-400 cursor-not-allowed dark:bg-gray-800 dark:text-gray-600'}`}
-            onClick={() => formData.salary ? saveToHistory() : null}
-          >
-            <FileText className="w-4 h-4" />
-            {t('view_report')}
-          </Link>
-        </div>
-      </div>
     </div>
   );
 };

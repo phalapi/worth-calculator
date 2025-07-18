@@ -40,9 +40,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <meta name="google-site-verification" content="_OQGiIpYz87USAsgJV2C07-JJhQ8myV_4GoM1kDjFic" />
-        <meta name="baidu-site-verification" content="codeva-pEoMg5F0Cv" />
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7207313144293144" crossOrigin="anonymous"></script>
         <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
       </head>
       <body
@@ -51,7 +48,7 @@ export default function RootLayout({
         <LanguageProvider>
           {children}
         </LanguageProvider>
-        <Analytics />
+
         <div className="pb-8"></div>
         <footer className="w-full py-3 border-t bg-white/90 dark:bg-gray-900/80 dark:border-gray-800/50">
           <div className="max-w-4xl mx-auto px-4">
@@ -113,7 +110,7 @@ export default function RootLayout({
               </a>
             </div>
             <div className="text-center">
-              <span className="text-[10px] text-gray-400 dark:text-gray-500">更多实用工具 by zippland.com</span>
+              <span className="text-[10px] text-gray-400 dark:text-gray-500">Tool by pdftool.cc</span>
             </div>
           </div>
         </footer>
