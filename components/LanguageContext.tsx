@@ -572,7 +572,7 @@ export const countryNames: Record<Language, Record<string, string>> = {
 const translations: Record<Language, Record<string, string>> = {
   zh: {
     // 标题和导航
-    'title': '这b班上得值不值·测算版',
+    'title': '这班上得值不值·测算版',
     'github': 'GitHub',
     'email': 'Email',
     'xiaohongshu': '小红书',
@@ -586,6 +586,8 @@ const translations: Record<Language, Record<string, string>> = {
     'delete_history': '删除',
     'clear_all': '清空全部',
     'restore_history': '恢复此记录',
+    'calculation_results': '计算结果',
+    'basic_info': '基本信息',
     
     // 表单标签
     'annual_salary_cny': '年薪总包（元）',
@@ -824,6 +826,9 @@ const translations: Record<Language, Record<string, string>> = {
     'delete_history': 'Delete',
     'clear_all': 'Clear All',
     'restore_history': 'Restore this record',
+    'calculation_results': 'Calculation Results',
+    'basic_info': 'Basic Info',
+    
     
     // Form labels
     'annual_salary_cny': 'Annual Salary (CNY)',
@@ -1062,6 +1067,8 @@ const translations: Record<Language, Record<string, string>> = {
     'delete_history': '削除',
     'clear_all': 'すべて削除',
     'restore_history': 'この記録を復元',
+    'calculation_results': '計算結果',
+    'basic_info': '基本情報',
     
     // フォームラベル
     'annual_salary_cny': '年収（元）',

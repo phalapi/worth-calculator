@@ -15,6 +15,7 @@ function getCountrySlug(code: string, lang: string): string {
 
 const CountryFooter: React.FC = () => {
   const { language } = useLanguage();
+  console.log('CountryFooter language', language);
   // 只展示有PPP数据的国家
   const countries = Object.keys(pppFactors)
     .map((code) => ({
