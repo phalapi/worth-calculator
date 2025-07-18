@@ -3,7 +3,15 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 // 定义语言类型
-export type Language = 'zh' | 'en' | 'ja';
+export type Language = 'en' | 'zh-TW' | 'ko' | 'vi' | 'hi' | 'th' | 'ru';
+
+// 导入翻译文件
+import zhTWTranslations from '../translations/zh-TW';
+import koTranslations from '../translations/ko';
+import viTranslations from '../translations/vi';
+import hiTranslations from '../translations/hi';
+import thTranslations from '../translations/th';
+import ruTranslations from '../translations/ru';
 
 // 创建上下文接口
 interface LanguageContextType {
@@ -14,7 +22,7 @@ interface LanguageContextType {
 
 // 创建默认上下文
 const defaultContext: LanguageContextType = {
-  language: 'zh',
+  language: 'en',
   setLanguage: () => {},
   t: (key: string) => key,
 };
@@ -24,7 +32,7 @@ const LanguageContext = createContext<LanguageContextType>(defaultContext);
 
 // 国家名称映射
 export const countryNames: Record<Language, Record<string, string>> = {
-  zh: {
+  'zh-TW': {
     'AF': '阿富汗',
     'AO': '安哥拉',
     'AL': '阿尔巴尼亚',
@@ -661,6 +669,8 @@ const translations: Record<Language, Record<string, string>> = {
     'canteen_excellent': '食堂超赞',
     
     // 教育和工作经验
+    'education_and_experience': '学历和工作经验',
+    'education_and_experience_desc': '您的学历背景和工作经验对工作价值有重要影响',
     'education_level': '个人学历水平',
     'degree_type': '学位类型',
     'below_bachelor': '专科及以下',
@@ -688,6 +698,8 @@ const translations: Record<Language, Record<string, string>> = {
     'days_unit': '天',
     'average_daily_salary': '平均日薪',
     'job_value': '工作性价比',
+    'result_description': '根据您提供的信息，我们计算出以下结果',
+    'report_description': '点击查看详细的工作性价比分析报告，包含个性化建议',
     'view_report': '查看我的工作性价比报告',
     
     // ShareCard组件
@@ -926,6 +938,8 @@ const translations: Record<Language, Record<string, string>> = {
     'days_unit': 'days',
     'average_daily_salary': 'Average daily salary',
     'job_value': 'Job Value Rating',
+    'result_description': 'Based on your input, we calculated the following results',
+    'report_description': 'Click to view detailed job worth analysis report with personalized recommendations',
     'view_report': 'View my job worth report',
     
     // ShareCard Component
@@ -1164,6 +1178,8 @@ const translations: Record<Language, Record<string, string>> = {
     'days_unit': '日',
     'average_daily_salary': '1日あたりの給与',
     'job_value': '仕事の価値',
+    'result_description': '入力された情報に基づき、以下の結果を算出しました',
+    'report_description': '詳細な仕事価値分析レポートと個別のアドバイスを見るにはクリック',
     'view_report': '診断レポートを見る',
 
     // ShareCardコンポーネント
@@ -1289,13 +1305,23 @@ const translations: Record<Language, Record<string, string>> = {
 // 提供上下文的组件
 export const LanguageProvider: React.FC<{children: ReactNode}> = ({ children }) => {
   // 从本地存储初始化语言，默认为中文
-  const [language, setLanguageState] = useState<Language>('zh');
+  const [language, setLanguageState] = useState<Language>('en');
 
   // 首次渲染时检查本地存储的语言设置
   useEffect(() => {
     const savedLanguage = localStorage.getItem('language') as Language;
-    if (savedLanguage && (savedLanguage === 'zh' || savedLanguage === 'en' || savedLanguage === 'ja')) {
+    if (savedLanguage && ['en', 'zh-TW', 'ko', 'vi', 'hi', 'th', 'ru'].includes(savedLanguage)) {
       setLanguageState(savedLanguage);
+    } else {
+      // Set default language based on browser
+      const browserLang = navigator.language;
+      if (browserLang === 'zh-TW') {
+        setLanguageState('zh-TW');
+      } else if (['ko', 'vi', 'hi', 'th', 'ru'].includes(browserLang)) {
+        setLanguageState(browserLang as Language);
+      } else {
+        setLanguageState('en');
+      }
     }
   }, []);
 
@@ -1307,11 +1333,23 @@ export const LanguageProvider: React.FC<{children: ReactNode}> = ({ children }) 
 
   // 翻译函数
   const t = (key: string): string => {
-    return translations[language][key] || key;
+    // 优先当前语言
+    if (translations[language] && translations[language][key]) {
+      return translations[language][key];
+    }
+    // fallback 到英文
+    if (translations['en'] && translations['en'][key]) {
+      return translations['en'][key];
+    }
+    // fallback 返回 key
+    return key;
   };
 
+
+  // 确保 context value 在 language 变化时引用更新，强制消费组件刷新
+  const contextValue = React.useMemo(() => ({ language, setLanguage, t }), [language, t]);
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+    <LanguageContext.Provider value={contextValue}>
       {children}
     </LanguageContext.Provider>
   );

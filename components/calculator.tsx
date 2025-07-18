@@ -5,9 +5,10 @@ import { Wallet, Github, FileText, Book, History, Eye , Star} from 'lucide-react
 import Link from 'next/link'; // 导入Link组件用于导航
 import { useLanguage } from './LanguageContext';
 import { LanguageSwitcher } from './LanguageSwitcher';
-import { countryNames } from './LanguageContext';
+import { countryNames } from './LanguageContext'; // Only use supported languages
 
 // 定义PPP转换因子映射表
+// NOTE: countryNames.zh and countryNames.ja are no longer used. Only use supported languages.
 const pppFactors: Record<string, number> = {
   'AF': 18.71,
   'AO': 167.66,
@@ -781,12 +782,12 @@ const SalaryCalculator = () => {
     options: Array<{ label: string; value: string; }>;
   }) => (
     <div className="space-y-2">
-      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">{label}</label>
-      <div className={`grid ${language === 'en' ? 'grid-cols-3' : 'grid-cols-4'} gap-2`}>
+      <label className="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">{label}</label>
+      <div className={`grid ${language === 'en' ? 'grid-cols-3' : 'grid-cols-4'} gap-3`}>
         {options.map((option) => (
           <button
             key={option.value}
-            className={`px-3 py-2 rounded-md text-sm transition-colors
+            className={`px-3 py-2.5 rounded-md text-sm transition-colors
               ${value === option.value 
                 ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300 font-medium' 
                 : 'bg-gray-50 hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-300'}`}
@@ -865,14 +866,15 @@ const SalaryCalculator = () => {
   }, [formData.degreeType, formData.schoolType, calculateEducationFactor]);
 
   // 获取当前选择的国家名称（根据语言）
+  // 获取当前选择的国家名称（根据语言，仅支持新语言集）
   const getCountryName = useCallback((countryCode: string) => {
-    if (language === 'en') {
-      return countryNames.en[countryCode] || countryCode || 'Unknown';
+    if (countryNames[language] && countryNames[language][countryCode]) {
+      return countryNames[language][countryCode];
     }
-    if (language === 'ja') {
-      return countryNames.ja[countryCode] || countryCode || '不明';
+    if (countryNames['en'] && countryNames['en'][countryCode]) {
+      return countryNames['en'][countryCode];
     }
-    return countryNames.zh[countryCode] || countryCode || '未知';
+    return countryCode || 'Unknown';
   }, [language]);
   
   // 保存当前记录到历史中
@@ -971,251 +973,136 @@ const SalaryCalculator = () => {
 
   return (
     <div className="max-w-2xl mx-auto p-4 sm:p-6">
-      <div className="mb-4 text-center">
-        <h1 className="text-3xl md:text-4xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 py-2">{t('title')}</h1>
-        
-        <div className="mb-3">
-          <a
-            href="https://github.com/zippland/worth-calculator"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition-colors inline-flex items-center gap-1.5"
-          >
-            <Star className="h-3.5 w-3.5" />
-            {t('star_request')}
-          </a>
+      <div className="mb-8 text-center">
+        <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 p-6 rounded-xl shadow-sm mb-6">
+          <h1 className="text-3xl md:text-4xl font-bold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 py-2">{t('title')}</h1>
+          <p className="text-gray-600 dark:text-gray-300 text-lg max-w-2xl mx-auto">{t('calculator_description')}</p>
         </div>
         
-        <div className="flex items-center justify-center gap-3 mb-2">
-          <p className="text-sm text-gray-500 dark:text-gray-400">v6.2.1</p>
-          <a
-            href="https://github.com/zippland/worth-calculator"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm text-gray-500 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-400 transition-colors flex items-center gap-1"
-          >
-            <Github className="h-3.5 w-3.5" />
-            {t('github')}
-          </a>
-          <a
-            href="https://www.xiaohongshu.com/user/profile/623e8b080000000010007721?xsec_token=YBzoLUB4HsSITTBOgPAXY-0Gvqvn3HqHpcDeA3sHhDh-M%3D&xsec_source=app_share&xhsshare=CopyLink&appuid=5c5d5259000000001d00ef04&apptime=1743400694&share_id=b9bfcd5090f9473daf5c1d1dc3eb0921&share_channel=copy_link"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm text-gray-500 hover:text-pink-500 dark:text-gray-400 dark:hover:text-pink-400 transition-colors flex items-center gap-1"
-          >
-            <Book className="h-3.5 w-3.5" />
-            {t('xiaohongshu')}
-          </a>
-          {/* 仅在客户端渲染历史记录按钮 */}
-          {isBrowser && (
-            <button
-              onClick={() => setShowHistory(!showHistory)}
-              className="text-sm text-gray-500 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-400 transition-colors flex items-center gap-1 cursor-pointer"
-            >
-              <History className="h-3.5 w-3.5" />
-              {t('history')}
-            </button>
-          )}
-        </div>
-        
-        {/* 历史记录列表 - 仅在客户端渲染 */}
-        {isBrowser && showHistory && (
-          <div className="relative z-10">
-            <div className="absolute left-1/2 transform -translate-x-1/2 mt-1 w-72 md:w-96 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 max-h-80 overflow-y-auto">
-              <div className="p-3">
-                <div className="flex justify-between items-center mb-3 border-b pb-2 border-gray-200 dark:border-gray-700">
-                  <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center">
-                    <History className="h-3.5 w-3.5 mr-1" />
-                    {t('history')}
-                  </h3>
-                  <div className="flex gap-2">
-                    {history.length > 0 && (
-                      <button 
-                        onClick={clearAllHistory}
-                        className="text-xs text-gray-500 hover:text-red-500 dark:hover:text-red-400 transition-colors px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
-                      >
-                        {t('clear_all')}
-                      </button>
-                    )}
-                    <button 
-                      onClick={(e) => {
-                        e.stopPropagation(); // 阻止事件冒泡
-                        setShowHistory(false);
-                      }}
-                      className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 w-6 h-6 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
-                    >
-                      ×
-                    </button>
-                  </div>
-                </div>
-                
-                {history.length > 0 ? (
-                  <ul className="space-y-2">
-                    {history.map((item) => (
-                      <li key={item.id} className="flex items-center justify-between p-2 rounded-lg bg-gray-50 dark:bg-gray-750 hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors border border-gray-100 dark:border-gray-600">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-1">
-                            <span className={`text-sm font-semibold ${item.assessmentColor}`}>{item.value}</span>
-                            <span className="text-xs px-2 py-0.5 rounded-full bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-300">
-                              {item.countryCode !== 'CN' ? '$' : '¥'}{item.salary}
-                            </span>
-                          </div>
-                          <div className="text-xs text-gray-500 flex items-center">
-                            <span>{formatDate(item.timestamp)}</span>
-                          </div>
-                        </div>
-                        <div className="flex gap-1">
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation(); // 阻止事件冒泡
-                              e.preventDefault(); // 阻止默认行为
-                              
-                              // 恢复历史记录中的值到当前表单
-                              setFormData({
-                                ...formData,
-                                salary: item.salary,
-                                cityFactor: item.cityFactor,
-                                workHours: item.workHours,
-                                commuteHours: item.commuteHours,
-                                restTime: item.restTime,
-                                workDaysPerWeek: item.workDaysPerWeek,
-                                wfhDaysPerWeek: item.wfhDaysPerWeek,
-                                annualLeave: item.annualLeave,
-                                paidSickLeave: item.paidSickLeave,
-                                publicHolidays: item.publicHolidays,
-                                workEnvironment: item.workEnvironment,
-                                leadership: item.leadership,
-                                teamwork: item.teamwork,
-                                degreeType: item.degreeType,
-                                schoolType: item.schoolType,
-                                education: item.education,
-                                homeTown: item.homeTown,
-                                shuttle: item.shuttle,
-                                canteen: item.canteen,
-                                workYears: item.workYears,
-                                jobStability: item.jobStability,
-                                bachelorType: item.bachelorType,
-                                // 确保 hasShuttle 和 hasCanteen 有合法的布尔值
-                                hasShuttle: typeof item.hasShuttle === 'boolean' ? item.hasShuttle : false,
-                                hasCanteen: typeof item.hasCanteen === 'boolean' ? item.hasCanteen : false,
-                              });
-                              
-                              // 设置国家
-                              handleCountryChange(item.countryCode);
-                              
-                              // 关闭历史记录面板
-                              setShowHistory(false);
-                            }}
-                            className="text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 p-1.5 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded"
-                            title={t('restore_history')}
-                          >
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                            </svg>
-                          </button>
-                          <Link
-                            href={{
-                              pathname: '/share',
-                              query: {
-                                value: item.value,
-                                assessment: item.assessment, // 传递翻译键而不是文本
-                                assessmentColor: item.assessmentColor,
-                                cityFactor: item.cityFactor,
-                                workHours: item.workHours,
-                                commuteHours: item.commuteHours,
-                                restTime: item.restTime,
-                                dailySalary: item.dailySalary,
-                                isYuan: item.countryCode !== 'CN' ? 'false' : 'true',
-                                workDaysPerYear: item.workDaysPerYear,
-                                workDaysPerWeek: item.workDaysPerWeek,
-                                wfhDaysPerWeek: item.wfhDaysPerWeek,
-                                annualLeave: item.annualLeave,
-                                paidSickLeave: item.paidSickLeave,
-                                publicHolidays: item.publicHolidays,
-                                workEnvironment: item.workEnvironment,
-                                leadership: item.leadership,
-                                teamwork: item.teamwork,
-                                degreeType: item.degreeType,
-                                schoolType: item.schoolType,
-                                education: item.education,
-                                homeTown: item.homeTown,
-                                shuttle: item.shuttle,
-                                canteen: item.canteen,
-                                workYears: item.workYears,
-                                jobStability: item.jobStability,
-                                bachelorType: item.bachelorType,
-                                countryCode: item.countryCode,
-                                countryName: getCountryName(item.countryCode),
-                                hasShuttle: item.hasShuttle,
-                                hasCanteen: item.hasCanteen,
-                              }
-                            }}
-                            className="text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 p-1.5 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded"
-                          >
-                            <Eye className="w-4 h-4" />
-                          </Link>
-                          <button
-                            onClick={(e) => deleteHistoryItem(item.id, e)}
-                            className="text-gray-400 hover:text-red-500 dark:hover:text-red-400 p-1.5 hover:bg-red-50 dark:hover:bg-red-900/20 rounded"
-                            title={t('delete_history')}
-                          >
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                            </svg>
-                          </button>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <div className="text-center py-8 px-4">
-                    <div className="text-gray-400 mb-2">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 mx-auto opacity-30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                    </div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                      {t('no_history')}
-                    </p>
-                    <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
-                      {t('history_notice')}
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
         
         <div className="flex justify-center mb-2">
           <LanguageSwitcher />
         </div>
         
-        {/* 访问统计 - 仅在客户端渲染 */}
-        {isBrowser && (
-          <div className="mt-1 text-xs text-gray-400 dark:text-gray-600 flex justify-center gap-4">
-            <span id="busuanzi_container_site_pv" className={`transition-opacity duration-300 ${visitorVisible ? 'opacity-100' : 'opacity-0'}`}>
-              {t('visits')}: <span id="busuanzi_value_site_pv"></span>
-            </span>
-            <span id="busuanzi_container_site_uv" className={`transition-opacity duration-300 ${visitorVisible ? 'opacity-100' : 'opacity-0'}`}>
-              {t('visitors')}: <span id="busuanzi_value_site_uv"></span>
-            </span>
+      </div>
+
+      {/* 结果卡片优化 */}
+      <div ref={shareResultsRef} className="mb-10 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-xl p-8 shadow-lg border border-gray-200 dark:border-gray-700">
+        <div className="border-l-4 border-yellow-500 pl-3 mb-6">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white">{t('results')}</h2>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{t('result_description')}</p>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-5 shadow-md border border-gray-100 dark:border-gray-700 transform transition-transform hover:scale-105">
+            <div className="text-base font-medium text-gray-500 dark:text-gray-400 mb-2 flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              {t('working_days_per_year')}
+            </div>
+            <div className="text-3xl font-bold mt-2 text-gray-900 dark:text-white">{calculateWorkingDays()}<span className="text-lg ml-1">{t('days_unit')}</span></div>
           </div>
-        )}
+          
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-5 shadow-md border border-gray-100 dark:border-gray-700 transform transition-transform hover:scale-105">
+            <div className="text-base font-medium text-gray-500 dark:text-gray-400 mb-2 flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              {t('average_daily_salary')}
+            </div>
+            <div className="text-3xl font-bold mt-2 text-gray-900 dark:text-white">
+              {getCurrencySymbol(selectedCountry)}{getDisplaySalary()}
+            </div>
+          </div>
+          
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-5 shadow-md border border-gray-100 dark:border-gray-700 transform transition-transform hover:scale-105">
+            <div className="text-base font-medium text-gray-500 dark:text-gray-400 mb-2 flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              </svg>
+              {t('job_value')}
+            </div>
+            <div className={`text-4xl font-bold mt-2 ${getValueAssessment().color}`}>
+              {value.toFixed(2)}
+            </div>
+            <div className={`text-sm font-medium mt-1 ${getValueAssessment().color}`}>
+              {getValueAssessment().text}
+            </div>
+          </div>
+        </div>
+        
+        {/* 修改分享按钮为链接到分享页面，并保存到历史 */}
+        <div className="mt-10 flex justify-center">
+          <Link
+            href={{
+              pathname: '/share',
+              query: {
+                value: value.toFixed(2),
+                assessment: getValueAssessmentKey(),
+                assessmentColor: getValueAssessment().color,
+                cityFactor: formData.cityFactor,
+                workHours: formData.workHours,
+                commuteHours: formData.commuteHours,
+                restTime: formData.restTime,
+                dailySalary: getDisplaySalary(),
+                isYuan: selectedCountry !== 'CN' ? 'false' : 'true',
+                workDaysPerYear: calculateWorkingDays().toString(),
+                workDaysPerWeek: formData.workDaysPerWeek,
+                wfhDaysPerWeek: formData.wfhDaysPerWeek,
+                annualLeave: formData.annualLeave,
+                paidSickLeave: formData.paidSickLeave,
+                publicHolidays: formData.publicHolidays,
+                workEnvironment: formData.workEnvironment,
+                leadership: formData.leadership,
+                teamwork: formData.teamwork,
+                degreeType: formData.degreeType,
+                schoolType: formData.schoolType,
+                education: formData.education,
+                homeTown: formData.homeTown,
+                shuttle: formData.hasShuttle ? formData.shuttle : '1.0',
+                canteen: formData.hasCanteen ? formData.canteen : '1.0',
+                workYears: formData.workYears,
+                jobStability: formData.jobStability,
+                bachelorType: formData.bachelorType,
+                countryCode: selectedCountry,
+                countryName: getCountryName(selectedCountry),
+                currencySymbol: getCurrencySymbol(selectedCountry),
+                hasShuttle: formData.hasShuttle,
+                hasCanteen: formData.hasCanteen,
+              }
+            }}
+            className={`flex items-center gap-3 px-8 py-4 rounded-xl text-base font-medium transition-all shadow-lg transform hover:scale-105
+              ${formData.salary ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700 dark:from-blue-600 dark:to-purple-700 dark:hover:from-blue-700 dark:hover:to-purple-800' : 
+              'bg-gray-200 text-gray-500 cursor-not-allowed dark:bg-gray-700 dark:text-gray-500'}`}
+            onClick={() => formData.salary ? saveToHistory() : null}
+          >
+            <FileText className="w-5 h-5" />
+            {t('view_report')}
+          </Link>
+        </div>
+        
+        <div className="mt-4 text-center text-sm text-gray-500 dark:text-gray-400">
+          {t('report_description')}
+        </div>
       </div>
 
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl shadow-gray-200/50 dark:shadow-black/30">
-        <div className="p-6 space-y-8">
+        <div className="p-6 space-y-10">
           {/* 薪资与工作时间 section */}
           <div className="space-y-6">
+            <div className="border-l-4 border-blue-500 pl-3">
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white">{t('salary_and_time')}</h2>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{t('salary_and_time_desc')}</p>
+            </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label className="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">
                 {selectedCountry !== 'CN' ? 
                   `${t('annual_salary')}(${getCurrencySymbol(selectedCountry)})` : 
                   t('annual_salary_cny')}
               </label>
-              <div className="flex items-center gap-2 mt-1">
-                <Wallet className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+              <div className="flex items-center gap-2">
+                <Wallet className="w-5 h-5 text-gray-500 dark:text-gray-400" />
                 <input
                   type="number"
                   value={formData.salary}
@@ -1223,7 +1110,7 @@ const SalaryCalculator = () => {
                   placeholder={selectedCountry !== 'CN' ? 
                     `${t('salary_placeholder')} ${getCurrencySymbol(selectedCountry)}` : 
                     t('salary_placeholder_cny')}
-                  className="block w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white"
+                  className="block w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white text-base"
                 />
               </div>
             </div>
@@ -1263,16 +1150,16 @@ const SalaryCalculator = () => {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">{t('work_days_per_week')}</label>
+                <label className="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">{t('work_days_per_week')}</label>
                 <input
                   type="number"
                   value={formData.workDaysPerWeek}
                   onChange={(e) => handleInputChange('workDaysPerWeek', e.target.value)}
-                  className="mt-1 block w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white"
+                  className="block w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white text-base"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                <label className="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">
                   {t('wfh_days_per_week')}
                   <span className="ml-1 inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-300 cursor-pointer group relative">
                     ?
@@ -1288,44 +1175,44 @@ const SalaryCalculator = () => {
                   step="1"
                   value={formData.wfhDaysPerWeek}
                   onChange={(e) => handleInputChange('wfhDaysPerWeek', e.target.value)}
-                  className="mt-1 block w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white"
+                  className="block w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white text-base"
                 />
               </div>
             </div>
             
             <div className="grid grid-cols-3 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">{t('annual_leave')}</label>
+                <label className="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">{t('annual_leave')}</label>
                 <input
                   type="number"
                   value={formData.annualLeave}
                   onChange={(e) => handleInputChange('annualLeave', e.target.value)}
-                  className="mt-1 block w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white"
+                  className="block w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white text-base"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">{t('public_holidays')}</label>
+                <label className="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">{t('public_holidays')}</label>
                 <input
                   type="number"
                   value={formData.publicHolidays}
                   onChange={(e) => handleInputChange('publicHolidays', e.target.value)}
-                  className="mt-1 block w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white"
+                  className="block w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white text-base"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">{t('paid_sick_leave')}</label>
+                <label className="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">{t('paid_sick_leave')}</label>
                 <input
                   type="number"
                   value={formData.paidSickLeave}
                   onChange={(e) => handleInputChange('paidSickLeave', e.target.value)}
-                  className="mt-1 block w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white"
+                  className="block w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white text-base"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-3 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                <label className="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">
                   {t('work_hours')}
                   <span className="ml-1 inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-300 cursor-pointer group relative">
                     ?
@@ -1338,11 +1225,11 @@ const SalaryCalculator = () => {
                   type="number"
                   value={formData.workHours}
                   onChange={(e) => handleInputChange('workHours', e.target.value)}
-                  className="mt-1 block w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white"
+                  className="block w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white text-base"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                <label className="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">
                   {t('commute_hours')}
                   <span className="ml-1 inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-300 cursor-pointer group relative">
                     ?
@@ -1355,16 +1242,16 @@ const SalaryCalculator = () => {
                   type="number"
                   value={formData.commuteHours}
                   onChange={(e) => handleInputChange('commuteHours', e.target.value)}
-                  className="mt-1 block w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white"
+                  className="block w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white text-base"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">{t('rest_time')}</label>
+                <label className="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">{t('rest_time')}</label>
                 <input
                   type="number"
                   value={formData.restTime}
                   onChange={(e) => handleInputChange('restTime', e.target.value)}
-                  className="mt-1 block w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white"
+                  className="block w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white text-base"
                 />
               </div>
             </div>
@@ -1373,18 +1260,22 @@ const SalaryCalculator = () => {
           <div className="border-t border-gray-200 dark:border-gray-700 my-6"></div>
 
           {/* 环境系数 */}
-          <div className="space-y-4">
+          <div className="space-y-6">
             {/* 学历和工作年限 */}
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">{t('education_level')}</label>
+            <div className="space-y-6">
+              <div className="border-l-4 border-purple-500 pl-3">
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white">{t('education_and_experience')}</h2>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{t('education_and_experience_desc')}</p>
+              </div>
+              <div className="space-y-3">
+                <label className="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">{t('education_level')}</label>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">{t('degree_type')}</label>
+                    <label className="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">{t('degree_type')}</label>
                     <select
                       value={formData.degreeType}
                       onChange={(e) => handleInputChange('degreeType', e.target.value)}
-                      className="block w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white"
+                      className="block w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white text-base"
                     >
                       <option value="belowBachelor">{t('below_bachelor')}</option>
                       <option value="bachelor">{t('bachelor')}</option>
@@ -1393,11 +1284,11 @@ const SalaryCalculator = () => {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">{t('school_type')}</label>
+                    <label className="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">{t('school_type')}</label>
                     <select
                       value={formData.schoolType}
                       onChange={(e) => handleInputChange('schoolType', e.target.value)}
-                      className="block w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white"
+                      className="block w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white text-base"
                       disabled={formData.degreeType === 'belowBachelor'}
                     >
                       <option value="secondTier">{t('school_second_tier')}</option>
@@ -1419,11 +1310,11 @@ const SalaryCalculator = () => {
                 {/* 硕士显示本科背景选项 */}
                 {formData.degreeType === 'masters' && (
                   <div className="mt-4">
-                    <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">{t('bachelor_background')}</label>
+                    <label className="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">{t('bachelor_background')}</label>
                     <select
                       value={formData.bachelorType}
                       onChange={(e) => handleInputChange('bachelorType', e.target.value)}
-                      className="block w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white"
+                      className="block w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white text-base"
                     >
                       <option value="secondTier">{t('school_second_tier')}</option>
                       <option value="firstTier">{t('school_first_tier_bachelor')}</option>
@@ -1435,11 +1326,11 @@ const SalaryCalculator = () => {
 
               {/* 工作年限选择 */}
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">{t('work_years')}</label>
+                <label className="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">{t('work_years')}</label>
                 <select
                   value={formData.workYears}
                   onChange={(e) => handleInputChange('workYears', e.target.value)}
-                  className="block w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white"
+                  className="block w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white text-base"
                 >
                   <option value="0">{t('fresh_graduate')}</option>
                   <option value="1">{t('years_1_3')}</option>
@@ -1452,6 +1343,11 @@ const SalaryCalculator = () => {
               </div>
             </div>
 
+            <div className="border-l-4 border-green-500 pl-3">
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white">{t('work_environment_title')}</h2>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{t('work_environment_desc')}</p>
+            </div>
+            
             {/* 添加工作类型RadioGroup */}
             <RadioGroup
               label={t('job_stability')}
@@ -1596,79 +1492,6 @@ const SalaryCalculator = () => {
               )}
             </div>
           </div>
-        </div>
-      </div>
-
-      {/* 结果卡片优化 */}
-      <div ref={shareResultsRef} className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 rounded-xl p-6 shadow-inner">
-        <div className="grid grid-cols-3 gap-8">
-          <div>
-            <div className="text-sm font-medium text-gray-500 dark:text-gray-400">{t('working_days_per_year')}</div>
-            <div className="text-2xl font-semibold mt-1 text-gray-900 dark:text-white">{calculateWorkingDays()}{t('days_unit')}</div>
-          </div>
-          <div>
-            <div className="text-sm font-medium text-gray-500 dark:text-gray-400">{t('average_daily_salary')}</div>
-            <div className="text-2xl font-semibold mt-1 text-gray-900 dark:text-white">
-              {getCurrencySymbol(selectedCountry)}{getDisplaySalary()}
-            </div>
-          </div>
-          <div>
-            <div className="text-sm font-medium text-gray-500 dark:text-gray-400">{t('job_value')}</div>
-            <div className={`text-2xl font-semibold mt-1 ${getValueAssessment().color}`}>
-              {value.toFixed(2)}
-              <span className="text-base ml-2">({getValueAssessment().text})</span>
-            </div>
-          </div>
-        </div>
-        
-        {/* 修改分享按钮为链接到分享页面，并保存到历史 */}
-        <div className="mt-6 flex justify-end">
-          <Link
-            href={{
-              pathname: '/share',
-              query: {
-                value: value.toFixed(2),
-                assessment: getValueAssessmentKey(),
-                assessmentColor: getValueAssessment().color,
-                cityFactor: formData.cityFactor,
-                workHours: formData.workHours,
-                commuteHours: formData.commuteHours,
-                restTime: formData.restTime,
-                dailySalary: getDisplaySalary(),
-                isYuan: selectedCountry !== 'CN' ? 'false' : 'true',
-                workDaysPerYear: calculateWorkingDays().toString(),
-                workDaysPerWeek: formData.workDaysPerWeek,
-                wfhDaysPerWeek: formData.wfhDaysPerWeek,
-                annualLeave: formData.annualLeave,
-                paidSickLeave: formData.paidSickLeave,
-                publicHolidays: formData.publicHolidays,
-                workEnvironment: formData.workEnvironment,
-                leadership: formData.leadership,
-                teamwork: formData.teamwork,
-                degreeType: formData.degreeType,
-                schoolType: formData.schoolType,
-                education: formData.education,
-                homeTown: formData.homeTown,
-                shuttle: formData.hasShuttle ? formData.shuttle : '1.0',
-                canteen: formData.hasCanteen ? formData.canteen : '1.0',
-                workYears: formData.workYears,
-                jobStability: formData.jobStability,
-                bachelorType: formData.bachelorType,
-                countryCode: selectedCountry,
-                countryName: getCountryName(selectedCountry),
-                currencySymbol: getCurrencySymbol(selectedCountry),
-                hasShuttle: formData.hasShuttle,
-                hasCanteen: formData.hasCanteen,
-              }
-            }}
-            className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors
-              ${formData.salary ? 'bg-blue-100 text-blue-700 hover:bg-blue-200 dark:bg-blue-900 dark:text-blue-300 dark:hover:bg-blue-800' : 
-              'bg-gray-100 text-gray-400 cursor-not-allowed dark:bg-gray-800 dark:text-gray-600'}`}
-            onClick={() => formData.salary ? saveToHistory() : null}
-          >
-            <FileText className="w-4 h-4" />
-            {t('view_report')}
-          </Link>
         </div>
       </div>
     </div>

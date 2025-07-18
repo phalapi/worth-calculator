@@ -204,13 +204,25 @@ const getWorkYearsDesc = (years: string, t: (key: string) => string): string => 
 
 // 获取当前语言环境下的国家名称
 const getCountryName = (countryCode: string, currentLanguage: string): string => {
-  if (currentLanguage === 'en') {
-    return countryNames.en[countryCode] || countryCode || 'Unknown';
+  if (currentLanguage === 'zh-TW') {
+    return countryNames['zh-TW'][countryCode] || countryCode || '未知';
   }
-  if (currentLanguage === 'ja') {
-    return countryNames.ja[countryCode] || countryCode || '不明';
+  if (currentLanguage === 'ko') {
+    return countryNames.ko?.[countryCode] || countryCode || 'Unknown';
   }
-  return countryNames.zh[countryCode] || countryCode || '未知';
+  if (currentLanguage === 'vi') {
+    return countryNames.vi?.[countryCode] || countryCode || 'Unknown';
+  }
+  if (currentLanguage === 'hi') {
+    return countryNames.hi?.[countryCode] || countryCode || 'Unknown';
+  }
+  if (currentLanguage === 'th') {
+    return countryNames.th?.[countryCode] || countryCode || 'Unknown';
+  }
+  if (currentLanguage === 'ru') {
+    return countryNames.ru?.[countryCode] || countryCode || 'Unknown';
+  }
+  return countryNames.en[countryCode] || countryCode || 'Unknown';
 };
 
 const ShareCard: React.FC<ShareCardProps> = (props) => {
