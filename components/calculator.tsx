@@ -453,22 +453,39 @@ const SalaryCalculator: React.FC<SalaryCalculatorProps> = ({ countryParam }) => 
     if (countryParam) {
       // 支持英文名、中文名、代码都能跳转
       let code: string | null = null;
-      // 先查英文名
+      
+      // 先查英文名（支持 slug 格式，如 "vietnam" 匹配 "Vietnam"）
       for (const [cc, name] of Object.entries(countryNames.en)) {
-        if (name.toLowerCase() === countryParam.toLowerCase()) code = cc;
+        const normalizedName = name.toLowerCase().replace(/[^a-zA-Z0-9]/g, '');
+        const normalizedParam = countryParam.toLowerCase().replace(/[^a-zA-Z0-9]/g, '');
+        if (normalizedName === normalizedParam) {
+          code = cc;
+          break;
+        }
       }
+      
       // 再查中文名
       if (!code) {
         for (const [cc, name] of Object.entries(countryNames.zh)) {
-          if (name === countryParam) code = cc;
+          if (name === countryParam) {
+            code = cc;
+            break;
+          }
         }
       }
+      
       // 再查直接是代码
       if (!code && pppFactors[countryParam.toUpperCase()]) {
         code = countryParam.toUpperCase();
       }
+      
       // 找到就设置
-      if (code) setSelectedCountry(code);
+      if (code) {
+        setSelectedCountry(code);
+        console.log(`Country resolved: ${countryParam} -> ${code}`);
+      } else {
+        console.log(`Country not found: ${countryParam}`);
+      }
     } else if (typeof window !== 'undefined') {
       const savedCountry = localStorage.getItem('selectedCountry');
       if (savedCountry) {
