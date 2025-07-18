@@ -923,7 +923,7 @@ const SalaryCalculator: React.FC<SalaryCalculatorProps> = ({ countryParam }) => 
     const newHistoryItem: HistoryItem = {
       id: Date.now().toString(),
       timestamp: Date.now(),
-      value: value.toFixed(2),
+      value: value.toFixed(1),
       assessment: getValueAssessmentKey(), // 使用翻译键而不是已翻译的文本
       assessmentColor: getValueAssessment().color,
       salary: formData.salary,
@@ -1025,10 +1025,10 @@ const SalaryCalculator: React.FC<SalaryCalculatorProps> = ({ countryParam }) => 
 
       <GoogleBannerAd />
       
-      {/* 优化后的结果卡片 */}
+      {/* 结果卡片 */}
       <div ref={shareResultsRef} className="mb-8">
-        <div className="bg-gradient-to-br from-blue-50/80 to-indigo-50/80 dark:from-gray-800/90 dark:to-gray-900 rounded-2xl p-6 shadow-lg ring-1 ring-gray-200/50 dark:ring-gray-700/30 backdrop-blur-sm transition-all duration-300 animate-fadeIn">
-          <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-6 flex items-center gap-2">
+        <div className="bg-gradient-to-br from-blue-50/80 via-indigo-50/60 to-purple-50/80 dark:from-gray-800/90 dark:via-indigo-900/30 dark:to-purple-900/20 rounded-2xl p-8 shadow-xl ring-1 ring-gray-200/50 dark:ring-gray-700/30 backdrop-blur-sm transition-all duration-300 animate-fadeIn">
+          <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-6 flex items-center gap-2 border-b border-gray-200/50 dark:border-gray-700/50 pb-3">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
             </svg>
@@ -1037,8 +1037,8 @@ const SalaryCalculator: React.FC<SalaryCalculatorProps> = ({ countryParam }) => 
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {/* 工作日卡片 */}
-            <div className="bg-white/80 dark:bg-gray-800/80 p-5 rounded-xl shadow-sm ring-1 ring-gray-200/50 dark:ring-gray-700/50 transition-all duration-300 hover:shadow-md hover:ring-blue-200 dark:hover:ring-blue-400/30">
-              <div className="text-sm font-medium text-gray-500 dark:text-gray-400 flex items-center gap-1.5">
+            <div className="bg-white/90 dark:bg-gray-800/90 p-6 rounded-xl shadow-md ring-1 ring-gray-200/70 dark:ring-gray-700/70 transition-all duration-300 hover:shadow-lg hover:ring-blue-200 dark:hover:ring-blue-400/30 transform hover:-translate-y-1">
+              <div className="text-sm font-medium text-gray-500 dark:text-gray-400 flex items-center gap-1.5 mb-3">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
@@ -1050,8 +1050,8 @@ const SalaryCalculator: React.FC<SalaryCalculatorProps> = ({ countryParam }) => 
             </div>
             
             {/* 日薪卡片 */}
-            <div className="bg-white/80 dark:bg-gray-800/80 p-5 rounded-xl shadow-sm ring-1 ring-gray-200/50 dark:ring-gray-700/50 transition-all duration-300 hover:shadow-md hover:ring-blue-200 dark:hover:ring-blue-400/30">
-              <div className="text-sm font-medium text-gray-500 dark:text-gray-400 flex items-center gap-1.5">
+            <div className="bg-white/90 dark:bg-gray-800/90 p-6 rounded-xl shadow-md ring-1 ring-gray-200/70 dark:ring-gray-700/70 transition-all duration-300 hover:shadow-lg hover:ring-blue-200 dark:hover:ring-blue-400/30 transform hover:-translate-y-1">
+              <div className="text-sm font-medium text-gray-500 dark:text-gray-400 flex items-center gap-1.5 mb-3">
                 <Wallet className="h-4 w-4" />
                 {t('average_daily_salary')}
               </div>
@@ -1064,8 +1064,8 @@ const SalaryCalculator: React.FC<SalaryCalculatorProps> = ({ countryParam }) => 
             </div>
             
             {/* 工作价值卡片 */}
-            <div className="bg-white/80 dark:bg-gray-800/80 p-5 rounded-xl shadow-sm ring-1 ring-gray-200/50 dark:ring-gray-700/50 transition-all duration-300 hover:shadow-md hover:ring-blue-200 dark:hover:ring-blue-400/30">
-              <div className="text-sm font-medium text-gray-500 dark:text-gray-400 flex items-center gap-1.5">
+            <div className="bg-white/90 dark:bg-gray-800/90 p-6 rounded-xl shadow-md ring-1 ring-gray-200/70 dark:ring-gray-700/70 transition-all duration-300 hover:shadow-lg hover:ring-blue-200 dark:hover:ring-blue-400/30 transform hover:-translate-y-1">
+              <div className="text-sm font-medium text-gray-500 dark:text-gray-400 flex items-center gap-1.5 mb-3">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
                 </svg>
@@ -1073,7 +1073,7 @@ const SalaryCalculator: React.FC<SalaryCalculatorProps> = ({ countryParam }) => 
               </div>
               <div className="flex items-center gap-3 mt-2">
                 <div className={`text-3xl font-bold ${getValueAssessment().color} animate-countUp`}>
-                  {value.toFixed(2)}
+                  {value.toFixed(1)}
                 </div>
                 <div className="flex">
                   {[1, 2, 3, 4, 5].map((star) => (
@@ -1090,13 +1090,13 @@ const SalaryCalculator: React.FC<SalaryCalculatorProps> = ({ countryParam }) => 
             </div>
           </div>
           
-          {/* 优化后的分享按钮 */}
-          <div className="mt-8 flex justify-end">
+          {/* 优化后的分享按钮 - 居中显示 */}
+          <div className="mt-10 flex justify-center">
             <Link
               href={{
                 pathname: '/share',
                 query: {
-                  value: value.toFixed(2),
+                  value: value.toFixed(1),
                   assessment: getValueAssessmentKey(),
                   assessmentColor: getValueAssessment().color,
                   cityFactor: formData.cityFactor,
@@ -1130,9 +1130,9 @@ const SalaryCalculator: React.FC<SalaryCalculatorProps> = ({ countryParam }) => 
                   hasCanteen: formData.hasCanteen,
                 }
               }}
-              className={`group relative inline-flex items-center justify-center px-5 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500
+              className={`group relative inline-flex items-center justify-center px-6 py-3 rounded-lg text-sm font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 min-w-[180px]
                 ${formData.salary 
-                  ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-md hover:shadow-lg hover:from-blue-700 hover:to-blue-600 dark:from-blue-700 dark:to-blue-600 dark:hover:from-blue-600 dark:hover:to-blue-500' 
+                  ? 'bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 text-white shadow-lg hover:shadow-xl hover:from-blue-700 hover:via-blue-600 hover:to-indigo-700 dark:from-blue-700 dark:via-blue-600 dark:to-indigo-700 dark:hover:from-blue-600 dark:hover:via-blue-500 dark:hover:to-indigo-600 scale-100 hover:scale-105' 
                   : 'bg-gray-200 text-gray-400 cursor-not-allowed dark:bg-gray-700 dark:text-gray-500'}`}
               onClick={() => formData.salary ? saveToHistory() : null}
             >
