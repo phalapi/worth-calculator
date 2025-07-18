@@ -996,7 +996,7 @@ const SalaryCalculator: React.FC<SalaryCalculatorProps> = ({ countryParam }) => 
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-8">
       <div className="mb-8 text-center">
         <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-teal-500 to-blue-600 py-2 animate-fadeIn">
-          {t('title')}
+          {t('title')}·{getCountryName(selectedCountry)}
         </h1>
         
         <div className="flex justify-center mb-2">
