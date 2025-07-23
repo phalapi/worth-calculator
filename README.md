@@ -3,14 +3,6 @@
 <img src="title.png" alt="Job Worth Calculator" width="500" />
 <br><br>
 
-<a href="https://trendshift.io/repositories/13145" target="_blank"><img src="https://trendshift.io/api/badge/repositories/13145" alt="Zippland%2Fworth-calculator | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
-
-<p>
-   <img src="https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white" alt="Next.js" />
-   <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React" />
-   <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS" />
-   <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
-</p>
 
 <div align="center">
 
@@ -19,16 +11,13 @@
 </div>
 
 <p>
-   <a href="#english"><img src="https://img.shields.io/badge/English-blue?style=for-the-badge" alt="English" /></a>
+   <a href="https://worthjob.pdftool.cc/singapore/"><img src="https://img.shields.io/badge/English-blue?style=for-the-badge" alt="Singapore" />Singapore</a>
    &nbsp;&nbsp;
-   <a href="#中文"><img src="https://img.shields.io/badge/中文-red?style=for-the-badge" alt="中文" /></a>
+   <a href="https://worthjob.pdftool.cc/china/"><img src="https://img.shields.io/badge/中文-red?style=for-the-badge" alt="中国" /></a>
    &nbsp;&nbsp;
-   <a href="#japanese"><img src="https://img.shields.io/badge/日本語-green?style=for-the-badge" alt="日本語" /></a>
+   <a href="https://worthjob.pdftool.cc/india/"><img src="https://img.shields.io/badge/日本語-green?style=for-the-badge" alt="India" />🇮India</a>
 </p>
 
-<p>
-🔥(访问量激增，Vercel免费额度老是用完，广告位招租)🔥
-</p>
 </div>
 
 ---
@@ -45,8 +34,12 @@
 - **🌏 PPP Conversion**: International salary comparison with Purchasing Power Parity conversion across 190+ countries
 - **👩‍🎓 Personal Factors**: Customize calculations with personal education level, work experience, and more
 - **📱 Detailed Report**: Generate a shareable, downloadable job analysis report
-- **🌐 Internationalization**: Available in both English and Chinese
+- **🌐 Multi-language Support**: Available in English, Chinese, and Japanese
 - **📱 Mobile Friendly**: Responsive design works on all devices
+- **🚀 Static Export**: Optimized for static hosting with improved performance
+- **📊 SEO Optimized**: Built-in sitemap generation and meta tags
+- **📈 Analytics Ready**: Integrated with Vercel Analytics
+- **🎨 Enhanced Sharing**: Improved share cards with QR codes and social media integration
 
 ### 🖥️ How to Use
 
@@ -56,7 +49,7 @@
 4. Specify environmental factors (city, work environment, team, etc.)
 5. Input your education and experience
 6. View your job worth score and detailed evaluation
-7. Generate a shareable report
+7. Generate a shareable report with QR code
 
 ### 📊 The Calculation
 
@@ -66,6 +59,15 @@ The job worth score is calculated using a comprehensive formula that accounts fo
 - Environmental aspects (office location, team dynamics)
 - Educational qualification premiums
 - Experience-based expectations
+
+### 🚀 Deployment
+
+This project is optimized for static hosting:
+
+```bash
+# Build for production
+npm run build
+```
 
 ### 👨‍💻 Contributing
 
@@ -97,8 +99,12 @@ Please make sure to test your changes before submitting a PR.
 - **🌏 PPP转换**: 通过购买力平价(PPP)转换支持190多个国家的薪资比较
 - **👩‍🎓 个人因素**: 根据个人学历、工作经验等定制计算
 - **📱 详细报告**: 生成可分享、可下载的工作分析报告
-- **🌐 国际化**: 支持中英文双语
+- **🌐 多语言支持**: 支持中文、英文、日文三种语言
 - **📱 移动友好**: 响应式设计，适用于所有设备
+- **🚀 静态导出**: 针对静态托管优化，提升性能
+- **📊 SEO优化**: 内置站点地图生成和元标签
+- **📈 数据分析**: 集成Vercel Analytics
+- **🎨 增强分享**: 改进的分享卡片，支持二维码和社交媒体集成
 
 ### 🖥️ 使用方法
 
@@ -108,7 +114,7 @@ Please make sure to test your changes before submitting a PR.
 4. 指定环境因素（城市、工作环境、团队等）
 5. 输入学历和工作经验
 6. 查看工作性价比分数和详细评估
-7. 生成可分享的报告
+7. 生成带二维码的可分享报告
 
 ### 📊 计算方法
 
@@ -118,6 +124,15 @@ Please make sure to test your changes before submitting a PR.
 - 环境因素（办公地点、团队关系）
 - 学历加成
 - 基于经验的期望值调整
+
+### 🚀 部署说明
+
+本项目针对静态托管进行了优化：
+
+```bash
+# 构建生产版本
+npm run build
+```
 
 ### 👨‍💻 贡献指南
 
@@ -151,6 +166,10 @@ Please make sure to test your changes before submitting a PR.
 - **📱 詳細レポート**: 共有可能でダウンロード可能な仕事分析レポートの生成
 - **🌐 多言語対応**: 英語、中国語、日本語で利用可能
 - **📱 モバイル対応**: すべてのデバイスで動作するレスポンシブデザイン
+- **🚀 静的エクスポート**: 静的ホスティングに最適化され、パフォーマンスが向上
+- **📊 SEO最適化**: サイトマップ生成とメタタグが組み込み済み
+- **📈 分析対応**: Vercel Analyticsと統合
+- **🎨 共有機能強化**: QRコードとソーシャルメディア統合をサポートする改善された共有カード
 
 ### 🖥️ 使用方法
 
@@ -160,7 +179,7 @@ Please make sure to test your changes before submitting a PR.
 4. 環境要素（都市、職場環境、チームなど）を指定
 5. 学歴と経験を入力
 6. 仕事の価値スコアと詳細評価を確認
-7. 共有可能なレポートを生成
+7. QRコード付きの共有可能なレポートを生成
 
 ### 📊 計算方法
 
@@ -170,6 +189,16 @@ Please make sure to test your changes before submitting a PR.
 - 環境的側面（オフィスの場所、チームダイナミクス）
 - 教育資格による優遇
 - 経験に基づく期待値
+
+### 🚀 デプロイ
+
+このプロジェクトは静的ホスティング用に最適化されています：
+
+```bash
+# 本番用ビルド
+npm run build
+
+```
 
 ### 👨‍💻 貢献方法
 
