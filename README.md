@@ -11,11 +11,11 @@
 </div>
 
 <p>
-   <a href="https://worthjob.pdftool.cc/singapore/"><img src="https://img.shields.io/badge/English-blue?style=for-the-badge" alt="Singapore" />Singapore</a>
+   <a href="https://worthjob.pdftool.cc/singapore/">Singapore</a>
    &nbsp;&nbsp;
-   <a href="https://worthjob.pdftool.cc/china/"><img src="https://img.shields.io/badge/中文-red?style=for-the-badge" alt="中国" /></a>
+   <a href="https://worthjob.pdftool.cc/china/">中国</a>
    &nbsp;&nbsp;
-   <a href="https://worthjob.pdftool.cc/india/"><img src="https://img.shields.io/badge/日本語-green?style=for-the-badge" alt="India" />🇮India</a>
+   <a href="https://worthjob.pdftool.cc/india/">India</a>
 </p>
 
 </div>
@@ -50,6 +50,12 @@
 5. Input your education and experience
 6. View your job worth score and detailed evaluation
 7. Generate a shareable report with QR code
+
+### Snapshot
+
+https://worthjob.pdftool.cc/singapore/
+
+![](/images/en.png)
 
 ### 📊 The Calculation
 
@@ -116,6 +122,12 @@ Please make sure to test your changes before submitting a PR.
 6. 查看工作性价比分数和详细评估
 7. 生成带二维码的可分享报告
 
+### 运行截图
+
+https://worthjob.pdftool.cc/singapore/
+
+![](/images/zh.png)
+
 ### 📊 计算方法
 
 工作性价比分数使用全面的公式计算，考虑了：
@@ -180,6 +192,12 @@ npm run build
 5. 学歴と経験を入力
 6. 仕事の価値スコアと詳細評価を確認
 7. QRコード付きの共有可能なレポートを生成
+
+### Snapshot
+
+https://worthjob.pdftool.cc/singapore/
+
+![](/images/ja.png)
 
 ### 📊 計算方法
 
